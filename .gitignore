@@ -1,0 +1,63 @@
+# Compiled class files
+target/
+out/
+bin/
+*.class
+
+# Logs
+logs/
+*.log
+hs_err_pid*
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+.DS_Store
+Thumbs.db
+
+# Maven
+.mvn/
+**/mvnw
+**/mvnw.cmd
+**/target/
+
+# Gradle
+.gradle/
+build/
+**/build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+
+# VS Code
+.vscode/
+
+# Mac system files
+.DS_Store
+._*
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+# application.properties
+# application.yml
+# application-*.properties
+# application-*.yml
+
+# JetBrains
+/.idea/
+/*.iml
+
