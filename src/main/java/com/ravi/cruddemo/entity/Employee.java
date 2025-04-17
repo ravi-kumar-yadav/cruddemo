@@ -4,6 +4,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "employee")
+
+@NamedQueries(
+        @NamedQuery(name = "findAll", query = "from Employee")
+)
+
+@NamedNativeQueries(
+        @NamedNativeQuery(name = "findById", query = "select * from employee e where e.id = :id", resultClass = Employee.class)
+)
 public class Employee {
 
     @Id
