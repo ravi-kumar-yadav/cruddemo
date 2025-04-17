@@ -11,9 +11,15 @@ import java.util.List;
 @Repository
 public interface EmployeeJPARepository extends JpaRepository<Employee, Long> {
 
-    @Query(name = "findAll")
-    List<Employee> findAll();
+    @Query(name = "findByFirstName")
+    List<Employee> findByFirstName(@Param("firstName") String firstName);
 
-    @Query(name = "findById", nativeQuery = true)
-    Employee findById(@Param("id") long id);
+    @Query(name = "findByLastName")
+    List<Employee> findByLastName(@Param("lastName") String lastName);
+
+    @Query(name = "findByEmailNative", nativeQuery = true)
+    List<Employee> findByEmail(@Param("email") String email);
+
+    @Query(name = "findByFirstNameAndEmailNative", nativeQuery = true)
+    List<Employee> findByFirstNameAndEmail(@Param("firstName") String firstName, @Param("email") String email);
 }

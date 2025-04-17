@@ -2,10 +2,12 @@ package com.ravi.cruddemo.service;
 
 import com.ravi.cruddemo.dao.EmployeeJPARepository;
 import com.ravi.cruddemo.entity.Employee;
+import com.ravi.cruddemo.exception.EmployeeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -33,7 +35,13 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public Employee findById(long employeeId) {
-        return employeeJPARepository.findById(employeeId);
+        Optional<Employee> dbEmployee = employeeJPARepository.findById(employeeId);
+
+        if (dbEmployee.isPresent()){
+            return dbEmployee.get();
+        } else {
+            throw new EmployeeNotFoundException("Employee not found for id: " + employeeId);
+        }
     }
 
     /**
@@ -42,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public Employee save(Employee employee) {
-        return null;
+        return employeeJPARepository.save(employee);
     }
 
     /**
@@ -50,7 +58,13 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public void deleteById(long employeeId) {
+        Optional<Employee> dbEmployee = employeeJPARepository.findById(employeeId);
 
+        if (dbEmployee.isPresent()){
+            employeeJPARepository.delete(dbEmployee.get());
+        } else {
+            throw new EmployeeNotFoundException("Employee not found with id: " + employeeId);
+        }
     }
 
     /**
@@ -59,7 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public List<Employee> findByFirstName(String firstName) {
-        return List.of();
+        return employeeJPARepository.findByFirstName(firstName);
     }
 
     /**
@@ -68,7 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public List<Employee> findByLastName(String lastName) {
-        return List.of();
+        return employeeJPARepository.findByLastName(lastName);
     }
 
     /**
@@ -77,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public List<Employee> findByEmail(String email) {
-        return List.of();
+        return employeeJPARepository.findByEmail(email);
     }
 
     /**
@@ -87,6 +101,6 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public List<Employee> findByFirstNameAndEmail(String firstName, String email) {
-        return List.of();
+        return employeeJPARepository.findByFirstNameAndEmail(firstName, email);
     }
 }

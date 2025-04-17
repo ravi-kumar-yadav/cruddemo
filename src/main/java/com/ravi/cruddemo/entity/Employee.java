@@ -5,13 +5,15 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "employee")
 
-@NamedQueries(
-        @NamedQuery(name = "findAll", query = "from Employee")
-)
+@NamedQueries({
+        @NamedQuery(name = "findByFirstName", query = "from Employee e where e.firstName = :firstName"),
+        @NamedQuery(name = "findByLastName", query = "from Employee e where e.lastName = :lastName")
+})
 
-@NamedNativeQueries(
-        @NamedNativeQuery(name = "findById", query = "select * from employee e where e.id = :id", resultClass = Employee.class)
-)
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "findByEmailNative", query = "select * from employee e where e.email = :email", resultClass = Employee.class),
+        @NamedNativeQuery(name = "findByFirstNameAndEmailNative", query = "select * from employee e where e.first_name = :firstName and e.email = :email", resultClass = Employee.class),
+})
 public class Employee {
 
     @Id
