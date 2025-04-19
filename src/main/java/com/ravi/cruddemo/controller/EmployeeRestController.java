@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api")
@@ -79,6 +80,11 @@ public class EmployeeRestController {
     @GetMapping("/employees/findByLastNameAndEmail")
     public ResponseEntity<List<Employee>> findByLastNameAndEmail (@RequestParam(value = "last_name", required = true) String lastName, @RequestParam(value = "email", required = true) String email){
         return new ResponseEntity<>(employeeService.findByLastNameAndEmail(lastName, email), HttpStatus.OK);
+    }
+
+    @PatchMapping("/employees/{employeeId}")
+    public ResponseEntity<Employee> patchUpdate(@PathVariable long employeeId, @RequestBody Map<String, Object> patchBody){
+        return new ResponseEntity<>(employeeService.patchUpdate(employeeId, patchBody), HttpStatus.OK);
     }
 
 }
