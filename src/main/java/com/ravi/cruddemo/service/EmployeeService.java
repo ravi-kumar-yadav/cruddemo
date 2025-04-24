@@ -10,5 +10,5 @@ public interface EmployeeService {
     Employee findById(long employeeId);
     Employee save(Employee employee);
     Employee deleteById(long employeeId);
-    Employee patchUpdate(Map<String, Object> patchBody);
+    Employee patchUpdate(long employeeId, Map<String, Object> patchBody);
 }

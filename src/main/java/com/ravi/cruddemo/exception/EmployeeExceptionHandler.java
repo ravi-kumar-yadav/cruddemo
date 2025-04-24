@@ -22,7 +22,7 @@ public class EmployeeExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<EmployeeErrorResponse> exceptionHandler(Exception exp){
-        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse(exp.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), System.currentTimeMillis());
+        EmployeeErrorResponse employeeErrorResponse = new EmployeeErrorResponse(exp.getMessage(), System.currentTimeMillis(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         return new ResponseEntity<>(employeeErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

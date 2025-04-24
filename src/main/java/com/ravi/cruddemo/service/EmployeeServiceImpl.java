@@ -1,6 +1,8 @@
 package com.ravi.cruddemo.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ravi.cruddemo.entity.Employee;
 import com.ravi.cruddemo.exception.EmployeeNotFoundException;
 import com.ravi.cruddemo.repository.EmployeeRespository;
@@ -59,7 +61,11 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public Employee save(Employee employee) {
-//        log.info("Going to save employee with details: {}", objectMapper.value);
+        try {
+            log.info("Going to save employee with details: {}", objectMapper.writeValueAsString(employee));
+        } catch (Exception exp){
+            log.error("Exception while printing Employee obj, exp: {}", exp.getMessage(), exp);
+        }
         return employeeRespository.save(employee);
     }
 
@@ -69,6 +75,8 @@ public class EmployeeServiceImpl implements EmployeeService{
      */
     @Override
     public Employee deleteById(long employeeId) {
+        log.info("Going to delete employee for id: {}", employeeId);
+
         Optional<Employee> dbEmployee = employeeRespository.findById(employeeId);
 
         if (dbEmployee.isPresent()){
@@ -83,7 +91,30 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @return
      */
     @Override
-    public Employee patchUpdate(Map<String, Object> patchBody) {
-        return null;
+    public Employee patchUpdate(long employeeId, Map<String, Object> patchBody) {
+        Optional<Employee> dbEmployee = employeeRespository.findById(employeeId);
+
+        if (!dbEmployee.isPresent()){
+            throw new EmployeeNotFoundException("Employee not found for id: " + employeeId);
+        }
+
+        if (patchBody.containsKey("id")){
+            throw new RuntimeException("Patch request body can't contain 'id' field");
+        }
+
+        Employee toBeSaved = dbEmployee.get();
+        toBeSaved = applyPatch(toBeSaved, patchBody);
+
+        return employeeRespository.save(toBeSaved);
     }
+
+    private Employee applyPatch(Employee employee, Map<String, Object> patchBody) {
+        ObjectNode employeeNode = objectMapper.convertValue(employee, ObjectNode.class);
+        ObjectNode patchNode = objectMapper.convertValue(patchBody, ObjectNode.class);
+
+        employeeNode.setAll(patchNode);
+
+        return objectMapper.convertValue(employeeNode, Employee.class);
+    }
+
 }
