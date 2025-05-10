@@ -74,16 +74,16 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @return
      */
     @Override
-    public Employee deleteById(long employeeId) {
+    public void deleteById(long employeeId) {
         log.info("Going to delete employee for id: {}", employeeId);
 
         Optional<Employee> dbEmployee = employeeRespository.findById(employeeId);
 
         if (dbEmployee.isPresent()){
             employeeRespository.deleteById(employeeId);
+        } else {
+            throw new EmployeeNotFoundException("Employee not found for id: " + employeeId);
         }
-
-        throw new EmployeeNotFoundException("Employee not found for id: " + employeeId);
     }
 
     /**

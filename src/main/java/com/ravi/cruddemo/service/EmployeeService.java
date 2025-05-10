@@ -9,6 +9,6 @@ public interface EmployeeService {
     List<Employee> findAll();
     Employee findById(long employeeId);
     Employee save(Employee employee);
-    Employee deleteById(long employeeId);
+    void deleteById(long employeeId);
     Employee patchUpdate(long employeeId, Map<String, Object> patchBody);
 }

@@ -47,7 +47,13 @@ public class EmployeeController {
     }
 
     @PatchMapping("/employees/{employeeId}")
-    public ResponseEntity<Employee> patch(@PathVariable long employeeId, Map<String, Object> patchBody){
+    public ResponseEntity<Employee> patch(@PathVariable long employeeId, @RequestBody Map<String, Object> patchBody){
         return new ResponseEntity<>(employeeService.patchUpdate(employeeId, patchBody), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/employees/{employeeId}")
+    public ResponseEntity<String> delete(@PathVariable long employeeId){
+        employeeService.deleteById(employeeId);
+        return new ResponseEntity<>("Deleted employee record for id: " + employeeId, HttpStatus.OK);
     }
 }
