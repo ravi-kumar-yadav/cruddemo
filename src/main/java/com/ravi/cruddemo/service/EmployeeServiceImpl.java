@@ -2,6 +2,7 @@ package com.ravi.cruddemo.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ravi.cruddemo.entity.Employee;
 import com.ravi.cruddemo.exception.EmployeeNotFoundException;
 import com.ravi.cruddemo.repository.EmployeeRepository;
@@ -121,7 +122,28 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @return
      */
     @Override
-    public Employee patchUpdate(long employeeId, Map<Object, Object> patchBody) {
-        return null;
+    public Employee patchUpdate(long employeeId, Map<String, Object> patchBody) {
+        Optional<Employee> dbEmployee = employeeRepository.findById(employeeId);
+
+        if (patchBody.containsKey("id")){
+            throw new RuntimeException("Patch request can't  have field:id in body");
+        }
+
+        if(dbEmployee.isPresent()){
+            Employee toBeUpdatedEmployee = toBeUpdatedEmployee(dbEmployee.get(), patchBody);
+
+            return employeeRepository.save(toBeUpdatedEmployee);
+        } else {
+            throw new EmployeeNotFoundException("Employee not found for id: " + employeeId);
+        }
+    }
+
+    private Employee toBeUpdatedEmployee(Employee dbEmployee, Map<String, Object> patchBody) {
+        ObjectNode employeeNode = objectMapper.convertValue(dbEmployee, ObjectNode.class);
+        ObjectNode patchNode = objectMapper.convertValue(patchBody, ObjectNode.class);
+
+        employeeNode.setAll(patchNode);
+
+        return objectMapper.convertValue(employeeNode, Employee.class);
     }
 }

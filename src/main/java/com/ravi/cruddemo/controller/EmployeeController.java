@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -89,5 +90,12 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> fetchByEmailAndFirstName(@RequestParam (name = "email", required = true) String email, @RequestParam (name = "first_name", required = true) String firstName){
         log.info("fetching all employees with email: {} and first_name: {}", email, firstName);
         return new ResponseEntity<>(employeeService.fetchByEmailAndFirstName(email, firstName), HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/employees/{employeeId}")
+    public ResponseEntity<Employee> patchUpdate(@PathVariable long employeeId, @RequestBody Map<String, Object> patchBody){
+        log.info("going to patch-update employee for id: {}", employeeId);
+        return new ResponseEntity<Employee>(employeeService.patchUpdate(employeeId, patchBody), HttpStatus.OK);
     }
 }

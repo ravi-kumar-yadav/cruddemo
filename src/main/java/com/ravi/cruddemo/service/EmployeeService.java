@@ -16,6 +16,6 @@ public interface EmployeeService {
     List<Employee> fetchByLastName(String lastName);
     List<Employee> fetchByEmail(String email);
     List<Employee> fetchByEmailAndFirstName(String email, String firstName);
-    Employee patchUpdate(long employeeId, Map<Object, Object> patchBody);
+    Employee patchUpdate(long employeeId, Map<String, Object> patchBody);
 
 }
